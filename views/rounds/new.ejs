@@ -1,0 +1,41 @@
+<%- include('../partials/header') %>
+
+<h1 class="mb-4">Add New Round</h1>
+
+<form action="/rounds" method="POST" class="w-50">
+
+  <div class="mb-3">
+    <label class="form-label">Player</label>
+    <select name="player" class="form-control" required>
+      <% players.forEach(p => { %>
+        <option value="<%= p._id %>"><%= p.name %></option>
+      <% }); %>
+    </select>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Date</label>
+    <input type="date" name="date" class="form-control" required>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Course</label>
+    <input type="text" name="course" class="form-control" required>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Score</label>
+    <input type="number" name="score" class="form-control" required>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Notes (optional)</label>
+    <textarea name="notes" class="form-control"></textarea>
+  </div>
+
+  <button class="btn btn-success">Add Round</button>
+  <a href="/players" class="btn btn-secondary">Cancel</a>
+
+</form>
+
+<%- include('../partials/footer') %>

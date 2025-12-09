@@ -2,9 +2,14 @@
 require('dotenv').config();
 const express = require('express');
 const path = require('path');
+
 // Connect to the database (MongoDB)
 const connectDB = require('./config/db');
 const { connect } = require('http2');
+
+// Import routes
+const playerRoutes = require('./routes/players');
+const roundRoutes = require('./routes/rounds');
 
 
 const app = express();
@@ -43,6 +48,11 @@ app.get('/test-create-player', async (req, res) => {
     res.status(500).send("Error creating test player");
   }
 });
+
+// Use routes
+app.use('/players', playerRoutes);
+app.use('/rounds', roundRoutes);
+
 
 // Start server
 app.listen(PORT, () => {

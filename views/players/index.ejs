@@ -1,0 +1,31 @@
+<%- include('../partials/header') %>
+
+<h1 class="mb-4">Players</h1>
+
+<a href="/players/new" class="btn btn-success mb-3">Add Player</a>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Email</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% if (players.length === 0) { %>
+      <tr>
+        <td colspan="2">No players yet. Add one!</td>
+      </tr>
+    <% } %>
+
+    <% players.forEach(player => { %>
+      <tr>
+        <td><%= player.name %></td>
+        <td><%= player.email || '-' %></td>
+      </tr>
+    <% }); %>
+  </tbody>
+</table>
+
+<%- include('../partials/footer') %>
