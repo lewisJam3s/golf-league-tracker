@@ -1,0 +1,44 @@
+<%- include('../partials/header') %>
+
+<h1>Edit Round</h1>
+
+<form action="/rounds/<%= round._id %>?_method=PUT" method="POST" class="w-50">
+
+  <div class="mb-3">
+    <label>Player</label>
+    <select name="player" class="form-control">
+      <% players.forEach(p => { %>
+        <option value="<%= p._id %>" <%= p._id.toString() === round.player.toString() ? "selected" : "" %> >
+          <%= p.name %>
+        </option>
+      <% }); %>
+    </select>
+  </div>
+
+  <div class="mb-3">
+    <label>Date</label>
+    <input type="date" name="date" class="form-control"
+      value="<%= round.date.toISOString().split('T')[0] %>">
+  </div>
+
+  <div class="mb-3">
+    <label>Course</label>
+    <input type="text" name="course" value="<%= round.course %>" class="form-control">
+  </div>
+
+  <div class="mb-3">
+    <label>Score</label>
+    <input type="number" name="score" value="<%= round.score %>" class="form-control">
+  </div>
+
+  <div class="mb-3">
+    <label>Notes</label>
+    <textarea name="notes" class="form-control"><%= round.notes %></textarea>
+  </div>
+
+  <button class="btn btn-success">Save</button>
+  <a href="/players/<%= round.player %>" class="btn btn-secondary">Cancel</a>
+
+</form>
+
+<%- include('../partials/footer') %>

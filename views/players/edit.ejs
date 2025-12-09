@@ -1,0 +1,31 @@
+<%- include('../partials/header') %>
+
+<h1>Edit Player</h1>
+
+<form action="/players/<%= player._id %>?_method=PUT" method="POST" class="w-50">
+
+  <div class="mb-3">
+    <label class="form-label">Name</label>
+    <input 
+      type="text" 
+      name="name" 
+      class="form-control"
+      value="<%= player.name %>"
+      required>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Email</label>
+    <input 
+      type="email" 
+      name="email" 
+      class="form-control"
+      value="<%= player.email %>">
+  </div>
+
+  <button class="btn btn-success">Save Changes</button>
+  <a href="/players/<%= player._id %>" class="btn btn-secondary">Cancel</a>
+
+</form>
+
+<%- include('../partials/footer') %>

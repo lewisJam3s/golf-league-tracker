@@ -3,6 +3,20 @@
 <h1 class="mb-3"><%= player.name %></h1>
 <p>Email: <%= player.email || "N/A" %></p>
 
+
+<a href="/players/<%= player._id %>/edit" class="btn btn-primary btn-sm">Edit Player</a>
+
+<form 
+  action="/players/<%= player._id %>?_method=DELETE" 
+  method="POST" 
+  style="display:inline;">
+  <button class="btn btn-danger btn-sm" onclick="return confirm('Delete this player?')">
+    Delete Player
+  </button>
+</form>
+
+<hr>
+
 <hr>
 
 <h3>Player Stats</h3>
@@ -36,12 +50,26 @@
   </thead>
   <tbody>
     <% rounds.forEach(r => { %>
-      <tr>
+     <tr>
         <td><%= r.date.toDateString() %></td>
         <td><%= r.course %></td>
         <td><%= r.score %></td>
         <td><%= r.notes || "-" %></td>
-      </tr>
+        <td>
+        <a href="/rounds/<%= r._id %>/edit" class="btn btn-primary btn-sm">Edit</a>
+            <form 
+                action="/rounds/<%= r._id %>?_method=DELETE" 
+                method="POST" 
+                style="display:inline;">
+                <button 
+                    class="btn btn-danger btn-sm" 
+                    onclick="return confirm('Delete this round?')">
+                    Delete
+                </button>
+            </form>
+        </td>
+    </tr>
+
     <% }) %>
   </tbody>
 </table>

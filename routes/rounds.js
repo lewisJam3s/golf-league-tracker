@@ -49,4 +49,55 @@ router.post('/', async (req, res) => {
   }
 });
 
+// GET /rounds/:id/edit - show edit form
+router.get('/:id/edit', async (req, res) => {
+  try {
+    const round = await Round.findById(req.params.id);
+    const players = await Player.find().sort({ name: 1 });
+
+    if (!round) return res.status(404).send("Round not found");
+
+    res.render('rounds/edit', { round, players });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Error loading round edit form");
+  }
+});
+
+// PUT /rounds/:id - update round
+router.put('/:id', async (req, res) => {
+  try {
+    const { player, date, course, score, notes } = req.body;
+
+    await Round.findByIdAndUpdate(req.params.id, {
+      player,
+      date,
+      course,
+      score,
+      notes
+    });
+
+    res.redirect(`/players/${player}`);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Error updating round");
+  }
+});
+
+// DELETE /rounds/:id - delete round
+router.delete('/:id', async (req, res) => {
+  try {
+    const round = await Round.findById(req.params.id);
+    const playerId = round.player;
+
+    await Round.findByIdAndDelete(req.params.id);
+
+    res.redirect(`/players/${playerId}`);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Error deleting round");
+  }
+});
+
+
 module.exports = router;

@@ -31,6 +31,19 @@ router.post('/', async (req, res) => {
   }
 });
 
+// GET /players/:id/edit - show edit form
+router.get('/:id/edit', async (req, res) => {
+  try {
+    const player = await Player.findById(req.params.id);
+    if (!player) return res.status(404).send("Player not found");
+
+    res.render('players/edit', { player });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Error loading edit form");
+  }
+});
+
 // GET /players/:id - Show player detail + rounds + stats
 router.get('/:id', async (req, res) => {
   try {
@@ -68,4 +81,28 @@ router.get('/:id', async (req, res) => {
     res.status(500).send("Error loading player detail page");
   }
 });
+
+// PUT /players/:id - update player
+router.put('/:id', async (req, res) => {
+  try {
+    const { name, email } = req.body;
+    await Player.findByIdAndUpdate(req.params.id, { name, email });
+    res.redirect(`/players/${req.params.id}`);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Error updating player");
+  }
+});
+
+// DELETE /players/:id - delete player
+router.delete('/:id', async (req, res) => {
+  try {
+    await Player.findByIdAndDelete(req.params.id);
+    res.redirect('/players');
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Error deleting player");
+  }
+});
+
 module.exports = router;

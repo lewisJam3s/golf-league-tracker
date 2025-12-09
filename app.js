@@ -20,6 +20,10 @@ connectDB();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+// Method override for PUT and DELETE in forms
+const methodOverride = require('method-override');
+app.use(methodOverride('_method'));
+
 // Set EJS as the templating engine
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
