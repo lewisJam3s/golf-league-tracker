@@ -24,8 +24,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Temporary home route
 app.get('/', (req, res) => {
-    res.send('Golf League Tracker is running!');
+  res.render('home');
 });
+
 
 // Port from .env (or fallback)
 const PORT = process.env.PORT || 3000;
