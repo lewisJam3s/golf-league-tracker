@@ -6,11 +6,17 @@
 
   <div class="mb-3">
     <label class="form-label">Player</label>
-    <select name="player" class="form-control" required>
-      <% players.forEach(p => { %>
-        <option value="<%= p._id %>"><%= p.name %></option>
-      <% }); %>
-    </select>
+        <select name="player" class="form-control" required>
+            <% players.forEach(p => { %>
+             <option 
+                value="<%= p._id %>" 
+                <%= (typeof preselectedPlayer !== 'undefined' && preselectedPlayer == p._id) ? "selected" : "" %>
+            >
+        <%= p.name %>
+    </option>
+  <% }); %>
+</select>
+
   </div>
 
   <div class="mb-3">

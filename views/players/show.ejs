@@ -1,0 +1,49 @@
+<%- include('../partials/header') %>
+
+<h1 class="mb-3"><%= player.name %></h1>
+<p>Email: <%= player.email || "N/A" %></p>
+
+<hr>
+
+<h3>Player Stats</h3>
+
+<% if (rounds.length === 0) { %>
+  <p>No rounds recorded yet. Add one below.</p>
+<% } else { %>
+  <ul>
+    <li><strong>Total Rounds:</strong> <%= rounds.length %></li>
+    <li><strong>Average Score:</strong> <%= averageScore %></li>
+    <li><strong>Best Score:</strong> <%= bestScore %></li>
+  </ul>
+<% } %>
+
+<a href="/rounds/new/<%= player._id %>" class="btn btn-success mb-4">
+  Add Round for <%= player.name %>
+</a>
+
+<hr>
+
+<h3>Rounds</h3>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Date</th>
+      <th>Course</th>
+      <th>Score</th>
+      <th>Notes</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% rounds.forEach(r => { %>
+      <tr>
+        <td><%= r.date.toDateString() %></td>
+        <td><%= r.course %></td>
+        <td><%= r.score %></td>
+        <td><%= r.notes || "-" %></td>
+      </tr>
+    <% }) %>
+  </tbody>
+</table>
+
+<%- include('../partials/footer') %>

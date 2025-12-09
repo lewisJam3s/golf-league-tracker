@@ -31,5 +31,41 @@ router.post('/', async (req, res) => {
   }
 });
 
-// Export router
+// GET /players/:id - Show player detail + rounds + stats
+router.get('/:id', async (req, res) => {
+  try {
+    const playerId = req.params.id;
+
+    // find player
+    const player = await Player.findById(playerId);
+    if (!player) return res.status(404).send("Player not found");
+
+    // find rounds linked to this player
+    const rounds = await require('../models/Round').find({ player: playerId })
+      .sort({ date: -1 }); // newest first
+
+    // Calculate stats
+    let averageScore = null;
+    let bestScore = null;
+
+    if (rounds.length > 0) {
+      const scores = rounds.map(r => r.score);
+      const sum = scores.reduce((a, b) => a + b, 0);
+
+      averageScore = (sum / scores.length).toFixed(1);
+      bestScore = Math.min(...scores);
+    }
+
+    res.render('players/show', {
+      player,
+      rounds,
+      averageScore,
+      bestScore
+    });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Error loading player detail page");
+  }
+});
 module.exports = router;

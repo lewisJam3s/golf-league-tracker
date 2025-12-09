@@ -21,7 +21,11 @@
 
     <% players.forEach(player => { %>
       <tr>
-        <td><%= player.name %></td>
+        <td>
+            <a href="/players/<%= player._id %>">
+                <%= player.name %>
+            </a>
+        </td>
         <td><%= player.email || '-' %></td>
       </tr>
     <% }); %>
