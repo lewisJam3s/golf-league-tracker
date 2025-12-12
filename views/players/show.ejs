@@ -1,77 +1,154 @@
 <%- include('../partials/header') %>
+<%- include('../partials/navbar') %>
 
-<h1 class="mb-3"><%= player.name %></h1>
-<p>Email: <%= player.email || "N/A" %></p>
+<div class="page-container">
+
+    <!-- PLAYER PROFILE CARD -->
+    <div class="card mb-4 p-4 shadow-sm">
+</p>
+
+<div class="d-flex justify-content-between align-items-start">
+
+    <!-- LEFT SIDE: Player Text + Handicap -->
+    <div>
+        <h1 class="mb-2"><%= player.name %></h1>
+        <p class="text-muted mb-2">Email: <%= player.email || "N/A" %></p>
+
+        <p class="mb-3">
+            <strong>Handicap Index:</strong>
+            <span class="badge"><%= handicapDisplay %></span>
+        </p>
+    </div>
+
+    <!-- RIGHT SIDE: Buttons stacked -->
+    <div class="d-flex flex-column gap-2">
+
+        <a href="/players/<%= player._id %>/edit" 
+           class="btn btn-outline w-100">
+            Edit Player
+        </a>
+
+        <form 
+            action="/players/<%= player._id %>?_method=DELETE"
+            method="POST"
+            onsubmit="return confirm('Delete this player?')">
+            <button class="btn btn-danger w-100">
+                Delete Player
+            </button>
+        </form>
+
+    </div>
+
+</div>
 
 
-<a href="/players/<%= player._id %>/edit" class="btn btn-primary btn-sm">Edit Player</a>
 
-<form 
-  action="/players/<%= player._id %>?_method=DELETE" 
-  method="POST" 
-  style="display:inline;">
-  <button class="btn btn-danger btn-sm" onclick="return confirm('Delete this player?')">
-    Delete Player
-  </button>
-</form>
+    <!-- METRIC CARDS -->
+    <div class="row mb-4">
 
-<hr>
+        <div class="col-md-4">
+            <div class="card text-center shadow-sm p-3">
+                <h5 class="text-success">Average Score</h5>
+                <p class="fs-4"><%= averageScore || "N/A" %></p>
+            </div>
+        </div>
 
-<hr>
+        <div class="col-md-4">
+            <div class="card text-center shadow-sm p-3">
+                <h5 class="text-success">Best Score</h5>
+                <p class="fs-4"><%= bestScore || "N/A" %></p>
+            </div>
+        </div>
 
-<h3>Player Stats</h3>
+        <div class="col-md-4">
+            <div class="card text-center shadow-sm p-3">
+                <h5 class="text-success">Total Rounds</h5>
+                <p class="fs-4"><%= rounds.length %></p>
+            </div>
+        </div>
 
-<% if (rounds.length === 0) { %>
-  <p>No rounds recorded yet. Add one below.</p>
-<% } else { %>
-  <ul>
-    <li><strong>Total Rounds:</strong> <%= rounds.length %></li>
-    <li><strong>Average Score:</strong> <%= averageScore %></li>
-    <li><strong>Best Score:</strong> <%= bestScore %></li>
-  </ul>
-<% } %>
+    </div>
 
-<a href="/rounds/new/<%= player._id %>" class="btn btn-success mb-4">
-  Add Round for <%= player.name %>
-</a>
+    <!-- ADD ROUND BUTTON -->
+    <div class="mb-3">
+        <a href="/rounds/new/<%= player._id %>" class="btn btn-success">
+            Add Round for <%= player.name %>
+        </a>
+    </div>
 
-<hr>
+    <!-- ROUNDS TABLE CARD -->
+    <div class="card p-4 shadow-sm">
+        <h3 class="mb-3">Rounds</h3>
 
-<h3>Rounds</h3>
+        <% if (rounds.length === 0) { %>
 
-<table class="table table-striped">
-  <thead>
-    <tr>
-      <th>Date</th>
-      <th>Course</th>
-      <th>Score</th>
-      <th>Notes</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% rounds.forEach(r => { %>
-     <tr>
-        <td><%= r.date.toDateString() %></td>
-        <td><%= r.course %></td>
-        <td><%= r.score %></td>
-        <td><%= r.notes || "-" %></td>
-        <td>
-        <a href="/rounds/<%= r._id %>/edit" class="btn btn-primary btn-sm">Edit</a>
-            <form 
-                action="/rounds/<%= r._id %>?_method=DELETE" 
-                method="POST" 
-                style="display:inline;">
-                <button 
-                    class="btn btn-danger btn-sm" 
-                    onclick="return confirm('Delete this round?')">
-                    Delete
-                </button>
-            </form>
-        </td>
-    </tr>
+            <p class="text-muted">No rounds recorded yet. Add one above!</p>
 
-    <% }) %>
-  </tbody>
-</table>
+        <% } else { %>
+
+        <div class="table-responsive">
+            <table class="table table-striped align-middle">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Date</th>
+                        <th>Course</th>
+                        <th>Score</th>
+                        <th>Holes</th>
+                        <th>Par</th>
+                        <th>Net</th>
+                        <th>Notes</th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% rounds.forEach(r => { %>
+                        <tr>
+                            <td><%= r.date.toDateString() %></td>
+                            <td><%= r.course %></td>
+                            <td><%= r.score %></td>
+                            <td><%= r.holes %></td>
+                            <td><%= r.par %></td>
+
+                            <!-- Color-coded net -->
+                            <td>
+                                <% if (r.net < 0) { %>
+                                    <span class="text-success fw-bold"><%= r.net %></span>
+                                <% } else if (r.net > 0) { %>
+                                    <span class="text-danger fw-bold">+<%= r.net %></span>
+                                <% } else { %>
+                                    <span class="fw-bold">E</span>
+                                <% } %>
+                            </td>
+
+                            <td><%= r.notes || "-" %></td>
+
+                            <td class="text-end">
+                                <a href="/rounds/<%= r._id %>/edit" class="btn btn-outline-primary btn-sm me-2">Edit</a>
+
+                                <form 
+                                    action="/rounds/<%= r._id %>?_method=DELETE"
+                                    method="POST"
+                                    style="display:inline;">
+                                    <button 
+                                        class="btn btn-danger btn-sm"
+                                        onclick="return confirm('Delete this round?')">
+                                        Delete
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+        </div>
+
+        <% } %>
+
+    </div>
+
+</div>
 
 <%- include('../partials/footer') %>
+
+
+

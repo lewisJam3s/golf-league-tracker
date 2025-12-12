@@ -6,7 +6,7 @@ const Player = require('../models/Player');
 // GET /players - List all players
 router.get('/', async (req, res) => {
   try {
-    const players = await Player.find().sort({ name: 1 }); // sort alphabetically
+    const players = await Player.find().sort({ name: 1 });
     res.render('players/index', { players });
   } catch (err) {
     console.error(err);
@@ -54,10 +54,52 @@ router.get('/:id', async (req, res) => {
     if (!player) return res.status(404).send("Player not found");
 
     // find rounds linked to this player
-    const rounds = await require('../models/Round').find({ player: playerId })
-      .sort({ date: -1 }); // newest first
+    const rounds = await require('../models/Round')
+      .find({ player: playerId })
+      .sort({ date: -1 });
 
-    // Calculate stats
+    // ⭐ STEP 1: Adjust 9-hole rounds, compute net
+    rounds.forEach(r => {
+      let adjScore = r.score;
+      let adjPar = r.par;
+
+      if (r.holes === 9) {
+        adjScore *= 2;
+        adjPar *= 2;
+      }
+
+      r.adjustedScore = adjScore;
+      r.adjustedPar = adjPar;
+      r.net = adjScore - adjPar;
+    });
+
+    // ⭐ STEP 2: Get all net scores (lower is better)
+    const netScores = rounds.map(r => r.net).sort((a, b) => a - b);
+
+    // ⭐ STEP 3: Use best 50% only
+    let handicapIndex = null;
+
+    if (netScores.length > 0) {
+      const countToUse = Math.ceil(netScores.length / 2);
+      const bestHalf = netScores.slice(0, countToUse);
+      const total = bestHalf.reduce((a, b) => a + b, 0);
+      handicapIndex = total / bestHalf.length;
+    }
+
+    // ⭐ STEP 4: Golf-style formatting (+8, -1, E)
+    let handicapDisplay = "N/A";
+
+    if (handicapIndex !== null) {
+      if (Math.abs(handicapIndex) < 0.5) {
+        handicapDisplay = "E";
+      } else if (handicapIndex > 0) {
+        handicapDisplay = `+${Math.round(handicapIndex)}`;
+      } else {
+        handicapDisplay = `${Math.round(handicapIndex)}`;
+      }
+    }
+
+    // ⭐ Old stats (still useful)
     let averageScore = null;
     let bestScore = null;
 
@@ -69,11 +111,13 @@ router.get('/:id', async (req, res) => {
       bestScore = Math.min(...scores);
     }
 
+    // ⭐ IMPORTANT: SEND HANDICAP TO THE VIEW!
     res.render('players/show', {
       player,
       rounds,
       averageScore,
-      bestScore
+      bestScore,
+      handicapDisplay
     });
 
   } catch (err) {
@@ -106,3 +150,4 @@ router.delete('/:id', async (req, res) => {
 });
 
 module.exports = router;
+

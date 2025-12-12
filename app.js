@@ -2,63 +2,45 @@
 require('dotenv').config();
 const express = require('express');
 const path = require('path');
+const methodOverride = require('method-override');
 
-// Connect to the database (MongoDB)
+// MongoDB connection
 const connectDB = require('./config/db');
-const { connect } = require('http2');
 
-// Import routes
+// Routes
 const playerRoutes = require('./routes/players');
 const roundRoutes = require('./routes/rounds');
 
-
 const app = express();
 
+// Connect to database
 connectDB();
 
-// Middleware to parse form data and JSON
+// Body parsers
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-// Method override for PUT and DELETE in forms
-const methodOverride = require('method-override');
+// Method override to allow PUT/DELETE in forms
 app.use(methodOverride('_method'));
 
-// Set EJS as the templating engine
+// EJS setup
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
-// Set static folder (for CSS, images, etc.)
+// Serve static files (CSS, images, JS)
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Temporary home route
+// Home page route
 app.get('/', (req, res) => {
   res.render('home');
 });
 
-
-// Port from .env (or fallback)
-const PORT = process.env.PORT || 3000;
-
-// TEMP TEST ROUTES (delete later)
-const Player = require('./models/Player');
-
-app.get('/test-create-player', async (req, res) => {
-  try {
-    const p = await Player.create({ name: "Test Player", email: "test@example.com" });
-    res.send(`Created test player with id: ${p._id}`);
-  } catch (err) {
-    console.error(err);
-    res.status(500).send("Error creating test player");
-  }
-});
-
-// Use routes
+// Register routes
 app.use('/players', playerRoutes);
 app.use('/rounds', roundRoutes);
 
-
 // Start server
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
 });

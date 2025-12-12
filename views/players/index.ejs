@@ -1,35 +1,46 @@
+
 <%- include('../partials/header') %>
+<%- include('../partials/navbar') %>
 
-<h1 class="mb-4">Players</h1>
+<div class="page-container">
 
-<a href="/players/new" class="btn btn-success mb-3">Add Player</a>
+  <h1 class="mb-4">Players</h1>
 
-<table class="table table-striped">
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Email</th>
-    </tr>
-  </thead>
+  <a href="/players/new" class="btn btn-success mb-4">Add Player</a>
 
-  <tbody>
-    <% if (players.length === 0) { %>
-      <tr>
-        <td colspan="2">No players yet. Add one!</td>
-      </tr>
-    <% } %>
+  <div class="card">
+    <table class="table table-striped mb-0">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+        </tr>
+      </thead>
 
-    <% players.forEach(player => { %>
-      <tr>
-        <td>
-            <a href="/players/<%= player._id %>">
+      <tbody>
+        <% if (players.length === 0) { %>
+          <tr>
+            <td colspan="2" class="text-center py-3 text-muted">
+              No players yet — add one to get started!
+            </td>
+          </tr>
+        <% } %>
+
+        <% players.forEach(player => { %>
+          <tr>
+            <td>
+              <a href="/players/<%= player._id %>" class="text-decoration-none fw-semibold">
                 <%= player.name %>
-            </a>
-        </td>
-        <td><%= player.email || '-' %></td>
-      </tr>
-    <% }); %>
-  </tbody>
-</table>
+              </a>
+            </td>
+            <td><%= player.email || '-' %></td>
+          </tr>
+        <% }); %>
+      </tbody>
+    </table>
+  </div>
+
+</div>
 
 <%- include('../partials/footer') %>
+

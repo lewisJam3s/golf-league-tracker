@@ -1,29 +1,36 @@
+
 <%- include('../partials/header') %>
+<%- include('../partials/navbar') %>
 
-<h1 class="mb-4">Add New Player</h1>
+<div class="page-container">
 
-<form action="/players" method="POST" class="w-50">
+  <h1 class="mb-4">Add New Player</h1>
 
-  <div class="mb-3">
-    <label class="form-label">Player Name</label>
-    <input 
-      type="text" 
-      name="name" 
-      class="form-control" 
-      required>
-  </div>
+  <form action="/players" method="POST" class="form-narrow">
 
-  <div class="mb-3">
-    <label class="form-label">Email (optional)</label>
-    <input 
-      type="email" 
-      name="email" 
-      class="form-control">
-  </div>
+    <div class="mb-3">
+      <label class="form-label fw-semibold">Player Name</label>
+      <input 
+        type="text" 
+        name="name" 
+        class="form-control"
+        required>
+    </div>
 
-  <button class="btn btn-success">Add Player</button>
-  <a href="/players" class="btn btn-secondary">Cancel</a>
+    <div class="mb-4">
+      <label class="form-label fw-semibold">Email (optional)</label>
+      <input 
+        type="email" 
+        name="email" 
+        class="form-control">
+    </div>
 
-</form>
+    <button class="btn btn-success me-2">Add Player</button>
+    <a href="/players" class="btn btn-secondary">Cancel</a>
+
+  </form>
+
+</div>
 
 <%- include('../partials/footer') %>
+

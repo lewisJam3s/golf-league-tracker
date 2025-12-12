@@ -32,13 +32,15 @@ router.get('/new', async (req, res) => {
 // POST /rounds - Create a new round
 router.post('/', async (req, res) => {
   try {
-    const { player, date, course, score, notes } = req.body;
+    const { player, date, course, score, holes, par, notes } = req.body;
 
     await Round.create({
       player,
       date,
       course,
       score,
+      holes,
+      par,
       notes
     });
 
@@ -67,13 +69,16 @@ router.get('/:id/edit', async (req, res) => {
 // PUT /rounds/:id - update round
 router.put('/:id', async (req, res) => {
   try {
-    const { player, date, course, score, notes } = req.body;
+    const { player, date, course, score, holes, par, notes } = req.body;
+
 
     await Round.findByIdAndUpdate(req.params.id, {
       player,
       date,
       course,
       score,
+      holes,
+      par,
       notes
     });
 

@@ -1,31 +1,43 @@
+
 <%- include('../partials/header') %>
+<%- include('../partials/navbar') %>
 
-<h1>Edit Player</h1>
+<div class="page-container">
 
-<form action="/players/<%= player._id %>?_method=PUT" method="POST" class="w-50">
+  <h1 class="mb-4">Edit Player</h1>
 
-  <div class="mb-3">
-    <label class="form-label">Name</label>
-    <input 
-      type="text" 
-      name="name" 
-      class="form-control"
-      value="<%= player.name %>"
-      required>
-  </div>
+  <form 
+    action="/players/<%= player._id %>?_method=PUT" 
+    method="POST" 
+    class="form-narrow"
+  >
 
-  <div class="mb-3">
-    <label class="form-label">Email</label>
-    <input 
-      type="email" 
-      name="email" 
-      class="form-control"
-      value="<%= player.email %>">
-  </div>
+    <div class="mb-3">
+      <label class="form-label fw-semibold">Name</label>
+      <input 
+        type="text" 
+        name="name" 
+        class="form-control"
+        value="<%= player.name %>"
+        required>
+    </div>
 
-  <button class="btn btn-success">Save Changes</button>
-  <a href="/players/<%= player._id %>" class="btn btn-secondary">Cancel</a>
+    <div class="mb-4">
+      <label class="form-label fw-semibold">Email</label>
+      <input 
+        type="email" 
+        name="email" 
+        class="form-control"
+        value="<%= player.email %>">
+    </div>
 
-</form>
+    <button class="btn btn-success me-2">Save Changes</button>
+    <a href="/players/<%= player._id %>" class="btn btn-secondary">Cancel</a>
+
+  </form>
+
+</div>
 
 <%- include('../partials/footer') %>
+
+
