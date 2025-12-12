@@ -1,3 +1,5 @@
+// James
+
 // routes/players.js
 const express = require('express');
 const router = express.Router();
@@ -150,4 +152,7 @@ router.delete('/:id', async (req, res) => {
 });
 
 module.exports = router;
+<<<<<<< HEAD
 
+=======
+>>>>>>> f0be5e6cb941b8f1ab1ac27a1abe953b16f2edbb
