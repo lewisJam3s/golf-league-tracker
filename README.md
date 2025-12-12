@@ -3,7 +3,8 @@ A full-stack web application for managing players, tracking golf rounds, calcula
 
 ## 📌 Overview
 Golf League Tracker is a complete CRUD-based system built with Node.js, Express, MongoDB, and EJS. The application allows golf league administrators or casual players to: 
-- Manage player profiles - Record and edit golf rounds
+- Manage player profiles
+- Record and edit golf rounds
 - Calculate handicap indexes automatically
 - View statistics such as best score, average score, and total rounds
 - Browse a clean, responsive homepage with a golf-course image carousel
@@ -64,6 +65,7 @@ This project is for educational use under CIS-435 at the University of Michigan�
 - MongoDB / Mongoose  
 - Express.js  
 - University of Michigan–Dearborn CIS-435 web development curriculum
+
 
 
 
